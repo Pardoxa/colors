@@ -22,7 +22,7 @@ def get_cmd_opts()
 
     OptionParser.new do |opt|
         opt.on('-h', '--hue HUE', 'Hue intensity scaling 0 <= hue <= 1'){|o| options.hue = o.to_f}
-        opt.on('-g', '--gamma GAMMA', 'Gamma value. gamma < 1 mphasises low intensity values, gamma > 1 high intensity ones'){|o| options.gamma = o.to_f}
+        opt.on('-g', '--gamma GAMMA', 'Gamma value. gamma < 1 emphasises low intensity values, gamma > 1 high intensity ones'){|o| options.gamma = o.to_f}
         opt.on('-s', '--start STARTCOLOR', 'Starting color? Value should be 0 <= s <= 1'){|o| options.s = o.to_f}
         opt.on('-r', '--rot ROTATION', "rotations in color (typically -1.5 to 1.5)"){|o| options.r = o.to_f}
         opt.on("", '--l1 LUMINECENCE_LOW', "Minimal brightness"){|o| options.l1 = o.to_f}
