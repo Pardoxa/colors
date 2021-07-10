@@ -1,13 +1,14 @@
 #!/usr/bin/env julia
 
 function main()
-    println("Test main")
     @show ARGS
     opt = defaultOpts()
     println(opt)
     o = cmd_opts()
-#    validOpts(o)
+    validOpts(o)
 end
+
+
 
 mutable struct Opts
     gamma::Float64
@@ -19,11 +20,38 @@ mutable struct Opts
     num_cols::Int
 end
 
-#function validOpts(opts)
-#    if opts.s < 0 || opts.s > 1
-#        println("Invalid starting color")
-#    end
-#end
+function validOpts(self::Opts)
+    invalid = false
+    if self.s < 0 || self.s > 1
+        println("Invalid starting color. It has to be 0 <= starting color <= 1; You used ", self.s)
+        invalid = true
+    end
+
+    if self.hue < 0 || self.hue > 1
+        println("Invalid hue, it has to be 0 <= hue <= 1; you used ",self.hue)
+        invalid = true
+    end
+
+    if self.low >= self.high 
+        invalid = true
+        println("low < high has to be true, but it wasn't. low: ", self.low, " high: ", self.high)
+    end
+
+    if self.low < 0 || self.low >= 1
+        invalid = true
+        println("low has to be 0 <= low < 1; Low was ", self.low)
+    end
+
+    if self.high <= 0 || self.high > 1
+        invalid = true
+        println("high has to be 0 < high <= 1; high was ", self.high)
+    end
+
+    if invalid
+        println("Terminating due to invalid Options")
+        exit(10)
+    end
+end
 
 function checkCMD(i::Int, len::Int, name)
     if len < i + 1
@@ -37,6 +65,10 @@ function cmd_opts()
     arg = ARGS
     println(arg)
     len=length(arg)
+    if len < 1 
+        println("First argument is positional and has to be the number of requested colors")
+        exit(3)
+    end
     opts.num_cols = parse(Int, arg[1])
     for i in 2:len
         if !startswith(arg[i], "-")
@@ -68,6 +100,7 @@ function cmd_opts()
         end
     end
     println(opts)
+    opts
 end
 
 function defaultOpts()
